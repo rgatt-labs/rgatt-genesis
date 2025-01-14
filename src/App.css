@@ -2,7 +2,7 @@ body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   overflow: hidden;
-  background: linear-gradient(135deg, #0A0A23, #110033); /* Fond principal */
+  background: linear-gradient(135deg, #016E4E, #004831);
 }
 
 html, body, #root {
@@ -30,26 +30,25 @@ html, body, #root {
 }
 
 .z-10 {
-  z-index: 10; /* Contenu interactif */
+  z-index: 10;
 }
 
 .z-0 {
-  z-index: 0; /* Image logo */
+  z-index: 0;
 }
 
-/* Animation du fond */
 .animate-gradient-slow {
   animation: gradient-background 15s ease infinite;
 }
 
 @keyframes gradient-background {
   0% {
-    background: #0A0A23;
+    background: #016E4E;
   }
   50% {
-    background: #110033;
+    background: #004831; /* Version plus sombre du vert principal */
   }
   100% {
-    background: #0A0A23;
+    background: #016E4E;
   }
 }
