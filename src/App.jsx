@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 function App() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [activeTooltip, setActiveTooltip] = useState(null);
+  const [showEmailSelector, setShowEmailSelector] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
 
   const handleMouseMove = (e) => {
     setMousePosition({ x: e.clientX, y: e.clientY });
@@ -15,18 +18,52 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (copySuccess) {
+      const timer = setTimeout(() => setCopySuccess(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [copySuccess]);
+
+  const emailAddress = "rgattlabs@gmail.com";
+
+  const emailProviders = [
+    {
+      name: "Gmail",
+      url: `https://mail.google.com/mail/?view=cm&fs=1&to=${emailAddress}`
+    },
+    {
+      name: "Outlook",
+      url: `https://outlook.live.com/mail/0/deeplink/compose?to=${emailAddress}`
+    },
+    {
+      name: "Default Email Client",
+      url: `mailto:${emailAddress}`
+    }
+  ];
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(emailAddress);
+      setCopySuccess(true);
+    } catch (err) {
+      console.error('Failed to copy email:', err);
+    }
+  };
+
   const menuLinks = [
     {
       title: "Vision",
-      href: "./src/assets/Rgatt Whitepaper.pdf",
+      href: "./RGATT.pdf",
       tooltip: "Read our introduction",
       isExternal: true
     },
     {
       title: "Contact",
-      href: "mailto:rgattlabs@gmail.com",
+      href: "#",
       tooltip: "Get in touch with us",
-      isExternal: true
+      isExternal: false,
+      isEmail: true
     },
     {
       title: "Jobs",
@@ -42,21 +79,76 @@ function App() {
     </svg>
   );
 
+  const handleEmailClick = (provider) => {
+    window.open(provider.url, '_blank');
+    setShowEmailSelector(false);
+  };
+
+  const EmailSelector = () => {
+    if (!showEmailSelector) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-[#1a1a3a] p-6 rounded-lg w-full max-w-md">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-white text-xl">Choose your email provider</h2>
+            <button 
+              onClick={() => setShowEmailSelector(false)}
+              className="text-white hover:text-gray-300"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="space-y-2">
+            {emailProviders.map((provider, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleEmailClick(provider)}
+                className="w-full px-4 py-2 text-white bg-[#2a2a4a] hover:bg-[#3a3a5a] rounded-lg transition-colors"
+              >
+                {provider.name}
+              </button>
+            ))}
+            
+            <button
+              onClick={handleCopyEmail}
+              className={`w-full px-4 py-2 text-white rounded-lg transition-all duration-300 ease-in-out ${
+                copySuccess 
+                  ? 'bg-green-500 hover:bg-green-600'
+                  : 'bg-[#2a2a4a] hover:bg-[#3a3a5a]'
+              }`}
+            >
+              {copySuccess ? 'Email Copied!' : 'Copy Email Address'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="relative flex min-h-screen overflow-hidden bg-[#0A0A23]">
-      <img
-        src="./src/assets/smart.jpg"
-        alt="Smart Image"
-        className="pointer-events-none fixed"
-        style={{
-          left: mousePosition.x,
-          top: mousePosition.y,
-          width: "60px",
-          height: "60px",
-          transform: "translate(-50%, -50%)",
-          zIndex: 10,
-        }}
-      />
+      {!imageError && (
+        <img
+          src="./smart.jpg"
+          alt="Smart Image"
+          className="pointer-events-none fixed"
+          style={{
+            left: mousePosition.x,
+            top: mousePosition.y,
+            width: "60px",
+            height: "60px",
+            transform: "translate(-50%, -50%)",
+            zIndex: 10,
+          }}
+          onError={() => {
+            console.error('Image failed to load');
+            setImageError(true);
+          }}
+        />
+      )}
+
+      <EmailSelector />
 
       <div className="relative z-10 flex w-full">
         <div className="w-1/2 flex items-center justify-center">
@@ -76,6 +168,13 @@ function App() {
                   <span className="text-3xl font-light text-white opacity-50 cursor-not-allowed transition-all duration-300 hover:scale-105">
                     {link.title}
                   </span>
+                ) : link.isEmail ? (
+                  <button
+                    onClick={() => setShowEmailSelector(true)}
+                    className="text-3xl font-light text-white transition-all duration-300 hover:scale-105 hover:text-opacity-80"
+                  >
+                    {link.title}
+                  </button>
                 ) : (
                   <a
                     href={link.href}

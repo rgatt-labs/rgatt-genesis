@@ -46,7 +46,7 @@ html, body, #root {
     background: #016E4E;
   }
   50% {
-    background: #004831; /* Version plus sombre du vert principal */
+    background: #004831;
   }
   100% {
     background: #016E4E;
