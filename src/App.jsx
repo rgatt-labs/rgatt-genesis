@@ -88,13 +88,14 @@ function App() {
     if (!showEmailSelector) return null;
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style={{ cursor: 'none' }}>
         <div className="bg-[#1a1a3a] p-6 rounded-lg w-full max-w-md">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-white text-xl">Choose your email provider</h2>
             <button 
               onClick={() => setShowEmailSelector(false)}
               className="text-white hover:text-gray-300"
+              style={{ cursor: 'none' }}
             >
               ✕
             </button>
@@ -105,6 +106,7 @@ function App() {
                 key={idx}
                 onClick={() => handleEmailClick(provider)}
                 className="w-full px-4 py-2 text-white bg-[#2a2a4a] hover:bg-[#3a3a5a] rounded-lg transition-colors"
+                style={{ cursor: 'none' }}
               >
                 {provider.name}
               </button>
@@ -117,6 +119,7 @@ function App() {
                   ? 'bg-green-500 hover:bg-green-600'
                   : 'bg-[#2a2a4a] hover:bg-[#3a3a5a]'
               }`}
+              style={{ cursor: 'none' }}
             >
               {copySuccess ? 'Email Copied!' : 'Copy Email Address'}
             </button>
@@ -127,19 +130,20 @@ function App() {
   };
 
   return (
-    <div className="relative flex min-h-screen overflow-hidden bg-[#0A0A23]">
+    <div className="relative flex min-h-screen overflow-hidden bg-[#0A0A23]" style={{ cursor: 'none' }}>
       {!imageError && (
         <img
-          src="./smart.jpg"
-          alt="Smart Image"
+          src="./rgatt-cursor.jpg"
+          alt="Cursor Image"
           className="pointer-events-none fixed"
           style={{
             left: mousePosition.x,
             top: mousePosition.y,
-            width: "60px",
-            height: "60px",
+            width: "120px",
+            height: "120px",
             transform: "translate(-50%, -50%)",
-            zIndex: 10,
+            zIndex: 50,
+            cursor: 'none'
           }}
           onError={() => {
             console.error('Image failed to load');
@@ -152,7 +156,7 @@ function App() {
 
       <div className="relative z-10 flex w-full">
         <div className="w-1/2 flex items-center justify-center">
-          <h1 className="text-6xl font-bold text-white tracking-tight">RGATT</h1>
+          <img src="./rgatt.png" alt="RGATT" className="h-auto" style={{ cursor: 'none' }} />
         </div>
 
         <div className="w-1/2 flex items-center justify-center">
@@ -163,15 +167,17 @@ function App() {
                 className="relative"
                 onMouseEnter={() => setActiveTooltip(index)}
                 onMouseLeave={() => setActiveTooltip(null)}
+                style={{ cursor: 'none' }}
               >
                 {link.isDisabled ? (
-                  <span className="text-3xl font-light text-white opacity-50 cursor-not-allowed transition-all duration-300 hover:scale-105">
+                  <span className="text-3xl font-light text-white opacity-50 cursor-not-allowed transition-all duration-300 hover:scale-105" style={{ cursor: 'none' }}>
                     {link.title}
                   </span>
                 ) : link.isEmail ? (
                   <button
                     onClick={() => setShowEmailSelector(true)}
                     className="text-3xl font-light text-white transition-all duration-300 hover:scale-105 hover:text-opacity-80"
+                    style={{ cursor: 'none' }}
                   >
                     {link.title}
                   </button>
@@ -181,6 +187,7 @@ function App() {
                     target={link.isExternal ? "_blank" : undefined}
                     rel={link.isExternal ? "noopener noreferrer" : undefined}
                     className="text-3xl font-light text-white transition-all duration-300 hover:scale-105 hover:text-opacity-80"
+                    style={{ cursor: 'none' }}
                   >
                     {link.title}
                   </a>
@@ -199,12 +206,14 @@ function App() {
               className="relative"
               onMouseEnter={() => setActiveTooltip('x')}
               onMouseLeave={() => setActiveTooltip(null)}
+              style={{ cursor: 'none' }}
             >
               <a
                 href="https://x.com/rgattlabs"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-3xl font-light text-white transition-all duration-300 hover:scale-105 hover:text-opacity-80 flex items-center justify-center"
+                style={{ cursor: 'none' }}
               >
                 Follow us on <XIcon />
               </a>
